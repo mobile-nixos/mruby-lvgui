@@ -1,4 +1,4 @@
-= mrbgems-lvgui
+= mruby-lvgui
 
 This is a WIP implementation of bindings for LVGL in mruby.
 
