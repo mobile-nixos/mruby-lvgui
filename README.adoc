@@ -38,3 +38,7 @@ is not done right.
 
 Then, the next issue is that it's entirely possible that *other* memory issues
 exist, but since mruby values are preferred, it's less likely.
+
+=== Hacks
+
+Some hacks specific to the use-case are present in the bindings.
