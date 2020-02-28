@@ -16,8 +16,10 @@
 /*
  * Used to setup the width/height of the SDL window in Ruby...
  */
+#if USE_MONITOR == 1
 extern int monitor_width;
 extern int monitor_height;
+#endif
 typedef struct mrb_lv_userdata_ {
   mrb_value value;
   mrb_state * mrb;
@@ -968,7 +970,9 @@ mrb_get_args(
   &value
 );
 
+#if USE_MONITOR == 1
 monitor_width = value;
+#endif
 }
 static mrb_value mrb_mruby_lvgui_module_LVGL_module_Hacks_monitor_height__equals(mrb_state * mrb, mrb_value self) {
 mrb_int value = 0;
@@ -981,7 +985,9 @@ mrb_get_args(
   &value
 );
 
+#if USE_MONITOR == 1
 monitor_height = value;
+#endif
 }
 static mrb_value mrb_mruby_lvgui_module_LVGL_module_Hacks_init(mrb_state * mrb, mrb_value self) {
 /*
