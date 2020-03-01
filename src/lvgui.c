@@ -4,6 +4,8 @@
  */
 #include <lv_lib_nanosvg/lv_nanosvg.h>
 #include <lvgl/lvgl.h>
+#include <lv_conf.h>
+#include <lv_drv_conf.h>
 #include <mruby.h>
 #include <mruby/data.h>
 #include <mruby/hash.h>
@@ -16,7 +18,7 @@
 /*
  * Used to setup the width/height of the SDL window in Ruby...
  */
-#if USE_MONITOR == 1
+#if USE_MONITOR
 extern int monitor_width;
 extern int monitor_height;
 #endif
@@ -90,6 +92,7 @@ static mrb_value mrb_mruby_lvgui_module_LVGL_class_LVStyle_text_sel_color(mrb_st
 static mrb_value mrb_mruby_lvgui_module_LVGL_class_LVStyle_text_sel_color__equals(mrb_state * mrb, mrb_value self);
 static mrb_value mrb_mruby_lvgui_module_LVGL_module_Hacks_monitor_width__equals(mrb_state * mrb, mrb_value self);
 static mrb_value mrb_mruby_lvgui_module_LVGL_module_Hacks_monitor_height__equals(mrb_state * mrb, mrb_value self);
+static mrb_value mrb_mruby_lvgui_module_LVGL_module_Hacks_simulator__question_mark(mrb_state * mrb, mrb_value self);
 static mrb_value mrb_mruby_lvgui_module_LVGL_module_Hacks_init(mrb_state * mrb, mrb_value self);
 static mrb_value mrb_mruby_lvgui_module_LVGL_module_Hacks_theme_night(mrb_state * mrb, mrb_value self);
 void mrb_mruby_lvgui_module_LVGL_module_Hacks_module_LVTask_task_handler(lv_task_t * task);
@@ -970,7 +973,7 @@ mrb_get_args(
   &value
 );
 
-#if USE_MONITOR == 1
+#if USE_MONITOR
 monitor_width = value;
 #endif
 }
@@ -985,8 +988,18 @@ mrb_get_args(
   &value
 );
 
-#if USE_MONITOR == 1
+#if USE_MONITOR
 monitor_height = value;
+#endif
+}
+static mrb_value mrb_mruby_lvgui_module_LVGL_module_Hacks_simulator__question_mark(mrb_state * mrb, mrb_value self) {
+/*
+ * Class method LVGL::Hacks#simulator__question_mark()
+ */
+#if LVGL_ENV_SIMULATOR
+return mrb_true_value();
+#else
+return mrb_false_value();
 #endif
 }
 static mrb_value mrb_mruby_lvgui_module_LVGL_module_Hacks_init(mrb_state * mrb, mrb_value self) {
@@ -4161,6 +4174,14 @@ mrb_define_class_method(
 	"monitor_height=",
 	mrb_mruby_lvgui_module_LVGL_module_Hacks_monitor_height__equals,
 	MRB_ARGS_REQ(1)
+);
+
+mrb_define_class_method(
+	mrb,
+	module_Hacks,
+	"simulator?",
+	mrb_mruby_lvgui_module_LVGL_module_Hacks_simulator__question_mark,
+	MRB_ARGS_NONE()
 );
 
 mrb_define_class_method(
