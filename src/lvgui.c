@@ -1028,7 +1028,7 @@ void mrb_mruby_lvgui_module_LVGL_module_Hacks_module_LVTask_task_handler(lv_task
 mrb_lv_userdata * data = (mrb_lv_userdata *)(task->user_data);
 mrb_state * mrb = data->mrb;
 mrb_value proc = data->value;
-//mrb_value proc = mrb_iv_get(data->mrb, (data->value), mrb_intern_cstr(data->mrb, "@event_handler_proc"));
+
 if (!mrb_nil_p(proc)) {
   mrb_funcall(mrb, proc, "call", 0);
 }
