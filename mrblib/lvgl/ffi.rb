@@ -36,6 +36,11 @@ module LVGL::FFI
   typealias("lv_coord_t", "int16_t")
   typedef "lv_obj_user_data_t", "void *"
 
+  # introspection.h
+  extern "bool lv_introspection_is_simulator()"
+  extern "bool lv_introspection_is_debug()"
+  extern "bool lv_introspection_use_assert_style()"
+
   # lvgl/src/lv_misc/lv_task.h
   enum!(:LV_TASK_PRIO, [
     :OFF,
@@ -245,7 +250,7 @@ module LVGL::FFI
 
   # Fiddle doesn't support nested structs yet.
   # https://github.com/ruby/fiddle/pull/27
-  LvStyleStruct = struct! [ # {{{
+  LvStyleStruct = struct! ([ # {{{
     [:uint8_t, :glass],
     [
       [
@@ -311,7 +316,9 @@ module LVGL::FFI
       ],
       :image
     ],
-  ] # }}}
+  ] + if lv_introspection_is_debug and lv_introspection_use_assert_style then [
+    [:uint32_t, :debug_sentinel]
+  ] else [] end) # }}}
 
   #extern "void lv_style_init(void)"
   extern "void lv_style_copy(lv_style_t *, const lv_style_t *)"

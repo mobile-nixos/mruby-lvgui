@@ -13,10 +13,9 @@ module LVGL::FFI
   ] # }}}
 
   extern "void hal_init()"
-  extern "bool lv_is_simulator()"
 
   # TODO: begin/rescue DLError and assume failing is we're not in simulator.
-  if lv_is_simulator
+  if lv_introspection_is_simulator
     global!("int", "monitor_width")
     global!("int", "monitor_height")
   end
@@ -53,12 +52,12 @@ module LVGL::Hacks
   end
 
   def self.monitor_height=(v)
-    if simulator?
+    if LVGL::Introspection.simulator?
       LVGL::FFI.monitor_height = v
     end
   end
   def self.monitor_width=(v)
-    if simulator?
+    if LVGL::Introspection.simulator?
       LVGL::FFI.monitor_width = v
     end
   end
@@ -66,10 +65,6 @@ module LVGL::Hacks
     LVGL::FFI.lv_theme_set_current(
       LVGL::FFI.lv_theme_night_init(hue, 0)
     )
-  end
-
-  def self.simulator?()
-    LVGL::FFI.lv_is_simulator != 0
   end
 
   module LVTask

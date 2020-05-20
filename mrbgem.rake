@@ -13,6 +13,7 @@ MRuby::Gem::Specification.new("mruby-lvgui") do |spec|
     "#{dir}/mrblib/lvgl.rb",
     "#{dir}/mrblib/lvgl/ffi.rb",
     "#{dir}/mrblib/lvgl/hacks.rb",
+    "#{dir}/mrblib/lvgl/introspection.rb",
     "#{dir}/mrblib/lvgl/lvgl.rb",
   ];
 end
