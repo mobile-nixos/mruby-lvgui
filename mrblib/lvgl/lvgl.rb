@@ -5,6 +5,7 @@ module LVGL
     :FIT,
     :LABEL_ALIGN,
     :LABEL_LONG,
+    :LABEL_STYLE,
     :LAYOUT,
     :PAGE_STYLE,
     :TABVIEW_STYLE,
@@ -131,6 +132,16 @@ module LVGL
 
   class LVLabel < LVObject
     LV_TYPE = :label
+
+    def get_style(type)
+      # type is unused, see lvgl/src/lv_objx/lv_label.h
+      super()
+    end
+
+    def set_style(type, style)
+      # type is unused, see lvgl/src/lv_objx/lv_label.h
+      super(style)
+    end
   end
 
   class LVImage < LVObject

@@ -205,6 +205,11 @@ module LVGL::FFI
   ], type: "uint8_t")
   typealias("lv_label_align_t", "LV_LABEL_ALIGN")
 
+  enum!(:LV_LABEL_STYLE, [
+    :MAIN
+  ], type: "uint8_t")
+  typealias("lv_label_style_t", "LV_LABEL_STYLE")
+
   extern "lv_obj_t * lv_label_create(lv_obj_t *, const lv_obj_t *)"
   extern "void lv_label_set_text(lv_obj_t *, const char *)"
   # extern "void lv_label_set_text_fmt(lv_obj_t * label, const char * fmt, ...)" varargs?
