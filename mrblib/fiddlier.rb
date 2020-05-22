@@ -76,6 +76,8 @@ module LVGL::Fiddlier
   end
 
   # Parses nested structs into a flattened Fiddle struct.
+  # XXX: broken because of struct alignment padding / packing
+  #      -> http://www.catb.org/esr/structure-packing/#_padding
   def struct!(fields)
     flattened = flatten_struct!(fields).map do |field|
       type = field.first

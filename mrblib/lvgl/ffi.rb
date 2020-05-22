@@ -297,6 +297,8 @@ module LVGL::FFI
     ],
     [
       [
+        # FIXME: struct! that knows about struct padding
+        [:uint32_t, :_pad01], # This is used to pad the struct so it is as long as expected.
         [:lv_color_t, :color],
         [:lv_color_t, :sel_color],
         ["lv_font_t *", :font],
