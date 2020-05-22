@@ -175,7 +175,6 @@ module LVGL::FFI
 
   # lvgl/src/lv_misc/lv_color.h
   typealias("lv_color_t", "uint32_t")
-  typealias("lv_color32_t", "lv_color_t")
   typealias("lv_opa_t", "uint8_t")
 
   # lvgl/src/lv_core/lv_disp.h
@@ -322,7 +321,7 @@ module LVGL::FFI
         [:lv_opa_t, :opa],
         [:uint8_t, :rounded],
       ],
-      :image
+      :line
     ],
   ] + if lv_introspection_is_debug and lv_introspection_use_assert_style then [
     [:uint32_t, :debug_sentinel]
