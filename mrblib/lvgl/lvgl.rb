@@ -152,9 +152,7 @@ module LVGL
     LV_TYPE = :tabview
 
     class LVTabpage < LVContainer
-      private
-      def initialize(*args)
-      end
+      LV_TYPE = :page
     end
 
     def set_sliding(en)
@@ -178,8 +176,8 @@ module LVGL
     end
 
     def add_tab(name)
-      tab_pointer = LVGL.ffi_call!(self.class, :add_tab, @self_pointer, name)
-      LVTabpage.from_pointer(tab_pointer)
+      page_pointer = LVGL.ffi_call!(self.class, :add_tab, @self_pointer, name)
+      LVTabpage.from_pointer(page_pointer)
     end
   end
 
