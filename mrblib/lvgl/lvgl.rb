@@ -42,18 +42,23 @@ module LVGL
       # @self_pointer int value => instance
     }
 
-    def initialize(parent = nil)
+    def initialize(parent = nil, pointer: nil)
       @event_handler_proc = nil
-      parent_ptr =
-        if parent
-          parent.lv_obj_pointer
-        else
-          nil
-        end
 
-      @self_pointer = LVGL.ffi_call!(self.class, :create, parent_ptr, nil)
+      unless pointer
+        parent_ptr =
+          if parent
+            parent.lv_obj_pointer
+          else
+            nil
+          end
+
+        @self_pointer = LVGL.ffi_call!(self.class, :create, parent_ptr, nil)
+      else
+        @self_pointer = pointer
+      end
       register_userdata
-      unless parent
+      unless parent or pointer
         $stderr.puts("[HACK] Creating #{self.class.name} as screen. (Switching lv_disp_load_scr!)")
         LVGL::FFI.lv_disp_load_scr(@self_pointer)
       end
@@ -64,12 +69,7 @@ module LVGL
     end
 
     def self.from_pointer(pointer)
-      instance = self.new()
-      instance.instance_exec do
-        @self_pointer = pointer
-      end
-
-      instance
+      self.new(pointer: pointer)
     end
 
     def get_style()
