@@ -197,23 +197,23 @@ module LVGL
     LV_TYPE = :btn
   end
 
-  # Wraps an +LvStyleStruct+ in a class with some light duty housekeeping.
+  # Wraps an +lv_style_t+ in a class with some light duty housekeeping.
   class LVStyle
-    # Given a +Fiddle::Pointer+ pointing to an +LvStyleStruct+, instantiates
-    # an LVStyle class, and wraps with +LvStyleStruct+.
+    # Given a +Fiddle::Pointer+ pointing to an +lv_style_t+, instantiates
+    # an LVStyle class, wrapping the struct.
     def self.from_pointer(pointer)
       instance = LVGL::LVStyle.new()
       instance.instance_exec do
-        @self_pointer = LVGL::FFI::LvStyleStruct.new(pointer.to_i)
+        @self_pointer = pointer
       end
 
       instance
     end
 
-    # Allocates a new +LvStyleStruct+, and copies the styles using the LVGL
+    # Allocates a new +lv_style_t+, and copies the styles using the LVGL
     # +lv_style_copy+.
     def initialize_copy(orig)
-      @self_pointer = LVGL::FFI::LvStyleStruct.malloc()
+      @self_pointer = LVGL::FFI.lvgui_allocate_lv_style()
       LVGL::FFI.lv_style_copy(@self_pointer, orig.lv_style_pointer)
     end
 
@@ -221,10 +221,17 @@ module LVGL
       @self_pointer
     end
 
-    # Proxy all methods to the LvStyleStruct we are wrapping.
+    # Proxy all methods to the struct accessors we are wrapping.
     # It's dumb, but it works so well!
-    def method_missing(*args)
-      @self_pointer.send(*args)
+    def method_missing(meth, *args)
+      meth =
+        if meth.to_s.match(/=$/)
+          "lvgui_set_lv_style__#{meth.to_s[0..-2]}".to_sym
+        else
+          "lvgui_get_lv_style__#{meth}".to_sym
+        end
+
+      LVGL::FFI.send(meth, @self_pointer, *args)
     end
 
     private
@@ -253,10 +260,7 @@ module LVGL
       global_name = "lv_style_#{name}".downcase
       const_name = "style_#{name}".upcase.to_sym
       wrapped = self.from_pointer(
-        LVGL::FFI.get_global_struct!(
-          LVGL::FFI::LvStyleStruct,
-          global_name
-        )
+        LVGL::FFI.handler.sym(global_name)
       )
       const_set(const_name, wrapped)
    end
