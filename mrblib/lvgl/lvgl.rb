@@ -142,6 +142,17 @@ module LVGL
       # type is unused, see lvgl/src/lv_objx/lv_label.h
       super(style)
     end
+
+    def set_text(text)
+      # The "\0" thing is a bit scary; it seems that *something* related
+      # to C string and "\0" in either mruby or LVGL, likely mruby, may
+      # cause issues when using something like `split` to split a bigger
+      # string.
+      #
+      # My assumption is that the ruby string is not \0 completed, and
+      # given as-is to the C world via ffi.
+      LVGL.ffi_call!(self.class, :set_text, @self_pointer, text + "\0")
+    end
   end
 
   class LVImage < LVObject
