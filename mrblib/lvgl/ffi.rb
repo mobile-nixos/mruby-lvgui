@@ -105,6 +105,8 @@ module LVGL::FFI
   extern "void lv_obj_set_pos(lv_obj_t *, lv_coord_t, lv_coord_t)"
   extern "void lv_obj_set_x(lv_obj_t *, lv_coord_t)"
   extern "void lv_obj_set_y(lv_obj_t *, lv_coord_t)"
+  extern "void lv_obj_clean(lv_obj_t *)"
+  extern "lv_obj_t * lv_obj_get_parent(const lv_obj_t *)"
 
   def handle_lv_event(obj_p, event)
     #userdata = lv_obj_get_user_data(obj_p)
