@@ -158,22 +158,11 @@ module LVGL::FFI
   ])
   typealias("lv_cont_style_t", "LV_CONT_STYLE")
 
-  # These ones are actually inlined to the obj one...
-  #extern "static inline const lv_style_t * lv_cont_get_style(const lv_obj_t *, lv_cont_style_t)"
-  #static inline void lv_cont_set_style(lv_obj_t * cont, lv_cont_style_t type, const lv_style_t * style)
-
   extern "lv_obj_t * lv_cont_create(lv_obj_t *, const lv_obj_t *)"
   extern "void lv_cont_set_layout(lv_obj_t *, lv_layout_t)"
   extern "void lv_cont_set_fit4(lv_obj_t *, lv_fit_t, lv_fit_t, lv_fit_t, lv_fit_t)"
-  #extern "static inline void lv_cont_set_fit2(lv_obj_t * cont, lv_fit_t hor, lv_fit_t ver)"
-  def lv_cont_set_fit2(cont, hor, ver)
-    lv_cont_set_fit4(cont, hor, hor, ver, ver)
-  end
-  module_function :lv_cont_set_fit2
-  #extern "static inline void lv_cont_set_fit(lv_obj_t * cont, lv_fit_t fit)"
-  def lv_cont_set_fit(cont, fit)
-    lv_cont_set_fit4(cont, fit, fit, fit, fit)
-  end
+  extern "void lv_cont_set_fit2(lv_obj_t *, lv_fit_t, lv_fit_t)"
+  extern "void lv_cont_set_fit(lv_obj_t *, lv_fit_t)"
 
   # lvgl/src/lv_misc/lv_color.h
   typealias("lv_color_t", "uint32_t")
@@ -229,11 +218,7 @@ module LVGL::FFI
   extern "lv_obj_t * lv_page_create(lv_obj_t *, const lv_obj_t *)"
   extern "void lv_page_clean(lv_obj_t *)"
   extern "lv_obj_t * lv_page_get_scrl(const lv_obj_t *)"
-  # static inline void lv_page_set_scrl_layout(lv_obj_t * page, lv_layout_t layout)
-  def lv_page_set_scrl_layout(page, layout)
-    lv_cont_set_layout(lv_page_get_scrl(page), layout)
-  end
-  module_function :lv_page_set_scrl_layout
+  extern "void lv_page_set_scrl_layout(lv_obj_t *, lv_layout_t)"
   extern "void lv_page_glue_obj(lv_obj_t *, bool)"
   extern "void lv_page_set_style(lv_obj_t *, lv_page_style_t, const lv_style_t *)"
 
