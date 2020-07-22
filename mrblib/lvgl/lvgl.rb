@@ -274,4 +274,46 @@ module LVGL
       const_set(const_name, wrapped)
    end
   end
+
+  class LVGroup
+    LV_TYPE = :group
+
+    # Given a +Fiddle::Pointer+ pointing to an +lv_group_t+, instantiates
+    # an LVGroup class, wrapping the struct.
+    def self.from_pointer(pointer)
+      instance = LVGL::LVGroup.new()
+      instance.instance_exec do
+        @self_pointer = pointer
+      end
+
+      instance
+    end
+
+    def initialize_copy(orig)
+      raise "Not implemented"
+    end
+
+    def lv_group_pointer()
+      @self_pointer
+    end
+
+    def method_missing(meth, *args)
+      LVGL.ffi_call!(self.class, meth, @self_pointer, *args)
+    end
+
+    def add_obj(obj)
+      ptr =
+        if obj.respond_to?(:lv_obj_pointer)
+          obj.lv_obj_pointer
+        else
+          obj
+        end
+      LVGL.ffi_call!(self.class, :add_obj, @self_pointer, ptr)
+    end
+
+    private
+
+    def initialize()
+    end
+  end
 end

@@ -262,4 +262,16 @@ module LVGL::FFI
   extern "void lv_tabview_set_anim_time(lv_obj_t *, uint16_t)"
   extern "lv_obj_t * lv_tabview_add_tab(lv_obj_t *, const char *)"
 
+  # Focus groups
+  extern "lv_group_t * lvgui_get_focus_group()"
+  extern "void lv_group_add_obj(lv_group_t *, lv_obj_t *)"
+  extern "void lv_group_remove_obj(lv_obj_t *)"
+  extern "void lv_group_remove_all_objs(lv_group_t *)"
+  extern "void lv_group_focus_obj(lv_obj_t *)"
+  extern "void lv_group_focus_next(lv_group_t *)"
+  extern "void lv_group_focus_prev(lv_group_t *)"
+  extern "void lv_group_focus_freeze(lv_group_t *, bool)"
+  extern "void lv_group_set_click_focus(lv_group_t *, bool)"
+  extern "void lv_group_set_wrap(lv_group_t *, bool)"
+  extern "lv_obj_t *lv_group_get_focused(const lv_group_t *)"
 end
