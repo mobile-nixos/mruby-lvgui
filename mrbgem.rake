@@ -16,6 +16,8 @@ MRuby::Gem::Specification.new("mruby-lvgui") do |spec|
     "#{dir}/mrblib/lvgl/hacks.rb",
     "#{dir}/mrblib/lvgl/introspection.rb",
     "#{dir}/mrblib/lvgl/lvgl.rb",
+    "#{dir}/mrblib/args.rb",
+    "#{dir}/mrblib/vtconsole.rb",
     "#{dir}/mrblib/lvgui.rb",
   ] + Dir.glob("#{dir}/mrblib/lvgui/**/*.rb").sort
 end

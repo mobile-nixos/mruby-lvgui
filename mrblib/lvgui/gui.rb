@@ -16,15 +16,29 @@ module LVGUI
     return if @initialized
     @initialized = true
 
+    Args.define({
+      resolution: nil,
+    })
+
+    # This is used by the "simulator".
+    if Args.get(:resolution)
+      pair = Args.get(:resolution).split("x")
+      unless pair.length == 2
+        $stderr.puts "--resolution <width>x<height>"
+        exit 2
+      end
+      LVGL::Hacks.monitor_width = pair.first.to_i
+      LVGL::Hacks.monitor_height = pair.last.to_i
+    else
+      LVGL::Hacks.monitor_width = 720
+      LVGL::Hacks.monitor_height = 1280
+    end
+
     # Get exclusive control of the framebuffer
     # By design we will not restore the console at exit.
     # We are assuming the target does not necessarily have a console attached to
     # the framebuffer, so this program has to be enough by itself.
     VTConsole.map_console(0)
-
-    # Used by the "simulator"
-    LVGL::Hacks.monitor_width = 720
-    LVGL::Hacks.monitor_height = 1280
 
     # Prepare LVGL
     LVGL::Hacks.init()
