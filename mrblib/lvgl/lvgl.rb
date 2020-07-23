@@ -316,4 +316,64 @@ module LVGL
     def initialize()
     end
   end
+
+  module Symbols
+    AUDIO          = "\xef\x80\x81" # 61441, 0xF001
+    VIDEO          = "\xef\x80\x88" # 61448, 0xF008
+    LIST           = "\xef\x80\x8b" # 61451, 0xF00B
+    OK             = "\xef\x80\x8c" # 61452, 0xF00C
+    CLOSE          = "\xef\x80\x8d" # 61453, 0xF00D
+    POWER          = "\xef\x80\x91" # 61457, 0xF011
+    SETTINGS       = "\xef\x80\x93" # 61459, 0xF013
+    HOME           = "\xef\x80\x95" # 61461, 0xF015
+    DOWNLOAD       = "\xef\x80\x99" # 61465, 0xF019
+    DRIVE          = "\xef\x80\x9c" # 61468, 0xF01C
+    REFRESH        = "\xef\x80\xa1" # 61473, 0xF021
+    MUTE           = "\xef\x80\xa6" # 61478, 0xF026
+    VOLUME_MID     = "\xef\x80\xa7" # 61479, 0xF027
+    VOLUME_MAX     = "\xef\x80\xa8" # 61480, 0xF028
+    IMAGE          = "\xef\x80\xbe" # 61502, 0xF03E
+    EDIT           = "\xef\x8C\x84" # 62212, 0xF304
+    PREV           = "\xef\x81\x88" # 61512, 0xF048
+    PLAY           = "\xef\x81\x8b" # 61515, 0xF04B
+    PAUSE          = "\xef\x81\x8c" # 61516, 0xF04C
+    STOP           = "\xef\x81\x8d" # 61517, 0xF04D
+    NEXT           = "\xef\x81\x91" # 61521, 0xF051
+    EJECT          = "\xef\x81\x92" # 61522, 0xF052
+    LEFT           = "\xef\x81\x93" # 61523, 0xF053
+    RIGHT          = "\xef\x81\x94" # 61524, 0xF054
+    PLUS           = "\xef\x81\xa7" # 61543, 0xF067
+    MINUS          = "\xef\x81\xa8" # 61544, 0xF068
+    EYE_OPEN       = "\xef\x81\xae" # 61550, 0xF06E
+    EYE_CLOSE      = "\xef\x81\xb0" # 61552, 0xF070
+    WARNING        = "\xef\x81\xb1" # 61553, 0xF071
+    SHUFFLE        = "\xef\x81\xb4" # 61556, 0xF074
+    UP             = "\xef\x81\xb7" # 61559, 0xF077
+    DOWN           = "\xef\x81\xb8" # 61560, 0xF078
+    LOOP           = "\xef\x81\xb9" # 61561, 0xF079
+    DIRECTORY      = "\xef\x81\xbb" # 61563, 0xF07B
+    UPLOAD         = "\xef\x82\x93" # 61587, 0xF093
+    CALL           = "\xef\x82\x95" # 61589, 0xF095
+    CUT            = "\xef\x83\x84" # 61636, 0xF0C4
+    COPY           = "\xef\x83\x85" # 61637, 0xF0C5
+    SAVE           = "\xef\x83\x87" # 61639, 0xF0C7
+    CHARGE         = "\xef\x83\xa7" # 61671, 0xF0E7
+    PASTE          = "\xef\x83\xAA" # 61674, 0xF0EA
+    BELL           = "\xef\x83\xb3" # 61683, 0xF0F3
+    KEYBOARD       = "\xef\x84\x9c" # 61724, 0xF11C
+    GPS            = "\xef\x84\xa4" # 61732, 0xF124
+    FILE           = "\xef\x85\x9b" # 61787, 0xF158
+    WIFI           = "\xef\x87\xab" # 61931, 0xF1EB
+    BATTERY_FULL   = "\xef\x89\x80" # 62016, 0xF240
+    BATTERY_3      = "\xef\x89\x81" # 62017, 0xF241
+    BATTERY_2      = "\xef\x89\x82" # 62018, 0xF242
+    BATTERY_1      = "\xef\x89\x83" # 62019, 0xF243
+    BATTERY_EMPTY  = "\xef\x89\x84" # 62020, 0xF244
+    USB            = "\xef\x8a\x87" # 62087, 0xF287
+    BLUETOOTH      = "\xef\x8a\x93" # 62099, 0xF293
+    TRASH          = "\xef\x8B\xAD" # 62189, 0xF2ED
+    BACKSPACE      = "\xef\x95\x9A" # 62810, 0xF55A
+    SD_CARD        = "\xef\x9F\x82" # 63426, 0xF7C2
+    NEW_LINE       = "\xef\xA2\xA2" # 63650, 0xF8A2
+  end
 end
