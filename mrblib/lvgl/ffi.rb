@@ -88,6 +88,7 @@ module LVGL::FFI
   typealias("lv_event_t", "LV_EVENT")
   typedef "lv_event_cb_t", "void (*lv_event_cb_t)(struct _lv_obj_t *, lv_event_t)"
 
+  extern "lv_obj_t * lv_obj_create(lv_obj_t *, const lv_obj_t *)"
   extern "const lv_style_t * lv_obj_get_style(const lv_obj_t *)"
   extern "void lv_obj_set_style(lv_obj_t *, const lv_style_t *)"
   extern "lv_coord_t lv_obj_get_width(const lv_obj_t *)"
