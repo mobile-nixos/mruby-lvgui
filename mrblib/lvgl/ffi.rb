@@ -245,23 +245,6 @@ module LVGL::FFI
   #extern "void lv_style_init(void)"
   extern "void lv_style_copy(lv_style_t *, const lv_style_t *)"
 
-  # lvgl/src/lv_objx/lv_tabview.h
-  enum!(:LV_TABVIEW_STYLE, [
-    :BG,
-    :INDIC,
-    :BTN_BG,
-    :BTN_REL,
-    :BTN_PR,
-    :BTN_TGL_REL,
-    :BTN_TGL_PR,
-  ], type: "uint8_t")
-  typealias("lv_tabview_style_t", "LV_TABVIEW_STYLE")
-
-  extern "lv_obj_t * lv_tabview_create(lv_obj_t *, const lv_obj_t *)"
-  extern "void lv_tabview_set_sliding(lv_obj_t *, bool)"
-  extern "void lv_tabview_set_anim_time(lv_obj_t *, uint16_t)"
-  extern "lv_obj_t * lv_tabview_add_tab(lv_obj_t *, const char *)"
-
   # Focus groups
   extern "lv_group_t * lvgui_get_focus_group()"
   extern "void lv_group_add_obj(lv_group_t *, lv_obj_t *)"

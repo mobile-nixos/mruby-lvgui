@@ -8,7 +8,6 @@ module LVGL
     :LABEL_STYLE,
     :LAYOUT,
     :PAGE_STYLE,
-    :TABVIEW_STYLE,
     :TASK_PRIO,
   ].each do |enum|
     const_set(enum, LVGL::FFI.const_get("LV_#{enum}".to_sym))
@@ -157,39 +156,6 @@ module LVGL
 
   class LVImage < LVObject
     LV_TYPE = :img
-  end
-
-  class LVTabview < LVObject
-    LV_TYPE = :tabview
-
-    class LVTabpage < LVContainer
-      LV_TYPE = :page
-    end
-
-    def set_sliding(en)
-      value =
-        if en
-          1
-        else
-          0
-        end
-      LVGL.ffi_call!(self.class, :set_sliding, @self_pointer, value)
-    end
-
-    def get_style(type)
-      # type is unused, see lvgl/src/lv_objx/lv_cont.h
-      super()
-    end
-
-    def set_style(type, style)
-      # type is unused, see lvgl/src/lv_objx/lv_cont.h
-      super(style)
-    end
-
-    def add_tab(name)
-      page_pointer = LVGL.ffi_call!(self.class, :add_tab, @self_pointer, name)
-      LVTabpage.from_pointer(page_pointer)
-    end
   end
 
   class LVPage < LVContainer
