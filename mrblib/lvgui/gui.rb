@@ -64,6 +64,11 @@ module LVGUI
     def method_missing(*args)
       @widget.send(*args)
     end
+
+    # Needed to make respond_to? work.
+    def lv_obj_pointer()
+      @widget.lv_obj_pointer
+    end
   end
 
   class Button < Widget
