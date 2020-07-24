@@ -13,9 +13,10 @@ module LVGL
     const_set(enum, LVGL::FFI.const_get("LV_#{enum}".to_sym))
   end
 
-  def self.ffi_call!(klass, meth, *args)
+  def self.ffi_call!(klass, meth, *args, _initiator_class: nil)
+    _initiator_class ||= klass
     unless klass.const_defined?(:LV_TYPE)
-      raise "Tried to ffi_call!(..., #{meth}) with a #{klass.name}, which does not define LV_TYPE"
+      raise "Tried to ffi_call!(..., #{meth}) with a #{_initiator_class.name}, which does not define LV_TYPE"
     end
 
     ffi_name = "lv_#{klass.const_get(:LV_TYPE)}_#{meth}".to_sym
@@ -24,7 +25,7 @@ module LVGL
       return LVGL::FFI.send(ffi_name, *args)
     else
       if klass.superclass
-        return ffi_call!(klass.superclass, meth, *args)
+        return ffi_call!(klass.superclass, meth, *args, _initiator_class: _initiator_class)
       else
         raise "Could not find #{meth} in the class hierarchy."
       end
