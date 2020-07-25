@@ -3,6 +3,14 @@ module LVGUI
   class BaseWindow
     include ::Singleton
 
+    def self.inherited(superclass)
+      superclass.class_eval do
+        unless self.class_variable_defined?(:@@_after_initialize_callback)
+          self.class_variable_set(:@@_after_initialize_callback, [])
+        end
+      end
+    end
+
     def initialize()
       super()
       # Initializes LVGUI things if required...
@@ -18,6 +26,10 @@ module LVGUI
       # Dummy object used as a "null" focus
       LVGL::LVObject.new(@screen).tap do |obj|
         add_to_focus_group(obj)
+      end
+
+      self.class.class_variable_get(:@@_after_initialize_callback).each do |cb|
+        instance_eval &cb
       end
     end
 
