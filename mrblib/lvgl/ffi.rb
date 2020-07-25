@@ -253,6 +253,7 @@ module LVGL::FFI
   extern "void lv_style_copy(lv_style_t *, const lv_style_t *)"
 
   # Focus groups
+  typedef "lv_group_focus_cb_t", "void (*lv_group_focus_cb_t)(struct _lv_group_t *)"
   extern "lv_group_t * lvgui_get_focus_group()"
   extern "void lv_group_add_obj(lv_group_t *, lv_obj_t *)"
   extern "void lv_group_remove_obj(lv_obj_t *)"
@@ -264,4 +265,23 @@ module LVGL::FFI
   extern "void lv_group_set_click_focus(lv_group_t *, bool)"
   extern "void lv_group_set_wrap(lv_group_t *, bool)"
   extern "lv_obj_t *lv_group_get_focused(const lv_group_t *)"
+  extern "void lv_group_set_focus_cb(lv_group_t *, lv_group_focus_cb_t)"
+  extern "lv_obj_t * lv_group_get_focused(const lv_group_t *)"
+
+  typedef "lv_group_user_data_t", "void *"
+  extern "lv_group_user_data_t *lv_group_get_user_data(lv_group_t *)"
+  extern "void lv_group_set_user_data(lv_group_t *, lv_group_user_data_t)"
+
+  def handle_lv_focus(group_p)
+    #userdata = lv_group_get_user_data(group_p)
+    #instance = userdata.to_value
+    # Pick from our registry, until we can rehydrate the object type with Fiddle.
+    instance = LVGL::LVGroup::REGISTRY[group_p.to_i]
+    instance.instance_exec do
+      if @focus_handler_proc
+        @focus_handler_proc.call()
+      end
+    end
+  end
+  bound_method! :handle_lv_focus, "void handle_lv_focus_(_lv_group_t *)"
 end

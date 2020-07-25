@@ -256,15 +256,30 @@ module LVGL
   class LVGroup
     LV_TYPE = :group
 
+    REGISTRY = {
+      # @self_pointer int value => instance
+    }
+
+    def initialize(pointer: nil)
+      @focus_handler_proc = nil
+
+      unless pointer
+        raise "(FIXME) Creating a focus group is not implemented"
+        #@self_pointer = LVGL.ffi_call!(self.class, :create)
+      else
+        @self_pointer = pointer
+      end
+      register_userdata
+    end
+
     # Given a +Fiddle::Pointer+ pointing to an +lv_group_t+, instantiates
     # an LVGroup class, wrapping the struct.
     def self.from_pointer(pointer)
-      instance = LVGL::LVGroup.new()
-      instance.instance_exec do
-        @self_pointer = pointer
+      if REGISTRY[pointer.to_i]
+        REGISTRY[pointer.to_i]
+      else
+        self.new(pointer: pointer)
       end
-
-      instance
     end
 
     def initialize_copy(orig)
@@ -289,9 +304,24 @@ module LVGL
       LVGL.ffi_call!(self.class, :add_obj, @self_pointer, ptr)
     end
 
-    private
+    def get_focused()
+      LVObject.from_pointer(
+        LVGL.ffi_call!(self.class, :get_focused, @self_pointer)
+      )
+    end
 
-    def initialize()
+    def focus_handler=(cb_proc)
+      # Hook the handler on-the-fly.
+      unless @focus_handler
+        LVGL.ffi_call!(self.class, :set_focus_cb, @self_pointer, LVGL::FFI["handle_lv_focus"])
+      end
+      @focus_handler_proc = cb_proc
+    end
+
+    def register_userdata()
+      userdata = Fiddle::Pointer[self]
+      REGISTRY[@self_pointer.to_i] = self
+      LVGL.ffi_call!(self.class, :set_user_data, @self_pointer, userdata)
     end
   end
 
