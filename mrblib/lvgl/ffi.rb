@@ -208,6 +208,11 @@ module LVGL::FFI
   extern "void lv_label_set_align(lv_obj_t *, lv_label_align_t)"
 
   # lvgl/src/lv_objx/lv_page.h
+  enum!(:LV_ANIM, [
+    :OFF,
+    :ON,
+  ])
+  typealias("lv_anim_enable_t", "LV_ANIM")
   enum!(:LV_PAGE_STYLE, [
     :BG,
     :SCRL,

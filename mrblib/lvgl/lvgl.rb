@@ -1,5 +1,6 @@
 module LVGL
   [
+    :ANIM,
     :CONT_STYLE,
     :EVENT,
     :FIT,
