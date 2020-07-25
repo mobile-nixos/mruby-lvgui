@@ -24,4 +24,30 @@ module LVGUI
       end
     end
   end
+
+  module Window
+    # Include with +include LVGUI::Window::WithBackButton+ and
+    # use e.g. +goes_back_to ->() { MainWindow.instance }+
+    module WithBackButton
+      def self.included(base)
+        base.extend ClassMethods
+      end
+
+      # Class methods included by WithBackButton
+      module ClassMethods
+        # A lambda (or proc)'s return value will determine which instance
+        # of an object the button will link to.
+        #
+        # This is done through a proc/lambda because otherwise it ends up
+        # depending on the singleton instance of windows directly.
+        def goes_back_to(prc)
+          class_variable_get(:@@_after_initialize_callback) << proc do
+            btn = LVGUI::BackButton.new(@toolbar, prc.call())
+            add_to_focus_group(btn)
+            @container.refresh
+          end
+        end
+      end
+    end
+  end
 end
