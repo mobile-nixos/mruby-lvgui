@@ -70,7 +70,11 @@ module LVGL
     end
 
     def self.from_pointer(pointer)
-      self.new(pointer: pointer)
+      if REGISTRY[pointer.to_i]
+        REGISTRY[pointer.to_i]
+      else
+        self.new(pointer: pointer)
+      end
     end
 
     def get_style()
