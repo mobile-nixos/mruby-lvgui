@@ -5,6 +5,7 @@ module LVGUI
   module ButtonPalette
     def add_button(label)
       Button.new(@container).tap do |btn|
+        add_to_focus_group(btn)
         btn.glue_obj(true)
         btn.set_label(label)
         btn.event_handler = ->(event) do
