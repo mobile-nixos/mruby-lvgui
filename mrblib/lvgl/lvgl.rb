@@ -168,6 +168,16 @@ module LVGL
       @style = style
       LVGL.ffi_call!(self.class, :set_style, @self_pointer, type, style.lv_style_pointer)
     end
+
+    def focus(obj, anim)
+      ptr =
+        if obj.respond_to?(:lv_obj_pointer)
+          obj.lv_obj_pointer
+        else
+          obj
+        end
+      LVGL.ffi_call!(self.class, :focus, @self_pointer, ptr, anim)
+    end
   end
 
   class LVButton < LVContainer

@@ -227,6 +227,7 @@ module LVGL::FFI
   extern "void lv_page_set_scrl_layout(lv_obj_t *, lv_layout_t)"
   extern "void lv_page_glue_obj(lv_obj_t *, bool)"
   extern "void lv_page_set_style(lv_obj_t *, lv_page_style_t, const lv_style_t *)"
+  extern "void lv_page_focus(lv_obj_t *, const lv_obj_t *, lv_anim_enable_t)"
 
   # lvgl/src/lv_core/lv_style.h
 
