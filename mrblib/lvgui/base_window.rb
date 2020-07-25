@@ -27,6 +27,7 @@ module LVGUI
       LVGL::LVObject.new(@screen).tap do |obj|
         add_to_focus_group(obj)
       end
+      reset_focus_group
 
       self.class.class_variable_get(:@@_after_initialize_callback).each do |cb|
         instance_eval &cb
@@ -44,6 +45,14 @@ module LVGUI
     def reset_focus_group()
       # Clear the focus group
       LVGUI.focus_group.remove_all_objs()
+
+      LVGUI.focus_group.focus_handler = ->() do
+        @container.focus(
+          LVGUI.focus_group.get_focused,
+          LVGL::ANIM::OFF
+        )
+      end
+
       @focus_group.each do |el|
         LVGUI.focus_group.add_obj(el)
       end
