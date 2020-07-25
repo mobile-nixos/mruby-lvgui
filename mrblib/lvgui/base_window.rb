@@ -13,11 +13,34 @@ module LVGUI
       @header = Header.new(@screen)
       @toolbar = Toolbar.new(@screen)
       @container = Page.new(@screen)
+
+      @focus_group = []
+      # Dummy object used as a "null" focus
+      LVGL::LVObject.new(@screen).tap do |obj|
+        add_to_focus_group(obj)
+      end
+    end
+
+    # Adds an object to the focus group list, and add it to the
+    # current focus group.
+    def add_to_focus_group(obj)
+        @focus_group << obj
+        LVGUI.focus_group.add_obj(obj)
+    end
+
+    # Re-build the focus group from the elements on the window.
+    def reset_focus_group()
+      # Clear the focus group
+      LVGUI.focus_group.remove_all_objs()
+      @focus_group.each do |el|
+        LVGUI.focus_group.add_obj(el)
+      end
     end
 
     # Switch to this window
     def present()
       LVGL::FFI.lv_disp_load_scr(@screen.lv_obj_pointer)
+      reset_focus_group
 
       # Allow the window to do some work every time it is switched to.
       on_present

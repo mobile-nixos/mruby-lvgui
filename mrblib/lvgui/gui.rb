@@ -56,6 +56,12 @@ module LVGUI
     end
   end
 
+  def self.focus_group()
+    LVGL::LVGroup.from_pointer(
+      LVGL::FFI.lvgui_get_focus_group
+    )
+  end
+
   # Wraps an LVGL widget.
   class Widget
     def initialize(widget)
