@@ -88,6 +88,7 @@ module LVGL::FFI
   typealias("lv_event_t", "LV_EVENT")
   typedef "lv_event_cb_t", "void (*lv_event_cb_t)(struct _lv_obj_t *, lv_event_t)"
 
+  extern "lv_obj_t * lv_obj_create(lv_obj_t *, const lv_obj_t *)"
   extern "const lv_style_t * lv_obj_get_style(const lv_obj_t *)"
   extern "void lv_obj_set_style(lv_obj_t *, const lv_style_t *)"
   extern "lv_coord_t lv_obj_get_width(const lv_obj_t *)"
@@ -107,6 +108,7 @@ module LVGL::FFI
   extern "void lv_obj_set_y(lv_obj_t *, lv_coord_t)"
   extern "void lv_obj_clean(lv_obj_t *)"
   extern "lv_obj_t * lv_obj_get_parent(const lv_obj_t *)"
+  extern "bool lv_obj_is_children(const lv_obj_t * obj, const lv_obj_t * target)"
 
   def handle_lv_event(obj_p, event)
     #userdata = lv_obj_get_user_data(obj_p)
@@ -158,22 +160,11 @@ module LVGL::FFI
   ])
   typealias("lv_cont_style_t", "LV_CONT_STYLE")
 
-  # These ones are actually inlined to the obj one...
-  #extern "static inline const lv_style_t * lv_cont_get_style(const lv_obj_t *, lv_cont_style_t)"
-  #static inline void lv_cont_set_style(lv_obj_t * cont, lv_cont_style_t type, const lv_style_t * style)
-
   extern "lv_obj_t * lv_cont_create(lv_obj_t *, const lv_obj_t *)"
   extern "void lv_cont_set_layout(lv_obj_t *, lv_layout_t)"
   extern "void lv_cont_set_fit4(lv_obj_t *, lv_fit_t, lv_fit_t, lv_fit_t, lv_fit_t)"
-  #extern "static inline void lv_cont_set_fit2(lv_obj_t * cont, lv_fit_t hor, lv_fit_t ver)"
-  def lv_cont_set_fit2(cont, hor, ver)
-    lv_cont_set_fit4(cont, hor, hor, ver, ver)
-  end
-  module_function :lv_cont_set_fit2
-  #extern "static inline void lv_cont_set_fit(lv_obj_t * cont, lv_fit_t fit)"
-  def lv_cont_set_fit(cont, fit)
-    lv_cont_set_fit4(cont, fit, fit, fit, fit)
-  end
+  extern "void lv_cont_set_fit2(lv_obj_t *, lv_fit_t, lv_fit_t)"
+  extern "void lv_cont_set_fit(lv_obj_t *, lv_fit_t)"
 
   # lvgl/src/lv_misc/lv_color.h
   typealias("lv_color_t", "uint32_t")
@@ -218,6 +209,11 @@ module LVGL::FFI
   extern "void lv_label_set_align(lv_obj_t *, lv_label_align_t)"
 
   # lvgl/src/lv_objx/lv_page.h
+  enum!(:LV_ANIM, [
+    :OFF,
+    :ON,
+  ])
+  typealias("lv_anim_enable_t", "LV_ANIM")
   enum!(:LV_PAGE_STYLE, [
     :BG,
     :SCRL,
@@ -229,13 +225,10 @@ module LVGL::FFI
   extern "lv_obj_t * lv_page_create(lv_obj_t *, const lv_obj_t *)"
   extern "void lv_page_clean(lv_obj_t *)"
   extern "lv_obj_t * lv_page_get_scrl(const lv_obj_t *)"
-  # static inline void lv_page_set_scrl_layout(lv_obj_t * page, lv_layout_t layout)
-  def lv_page_set_scrl_layout(page, layout)
-    lv_cont_set_layout(lv_page_get_scrl(page), layout)
-  end
-  module_function :lv_page_set_scrl_layout
+  extern "void lv_page_set_scrl_layout(lv_obj_t *, lv_layout_t)"
   extern "void lv_page_glue_obj(lv_obj_t *, bool)"
   extern "void lv_page_set_style(lv_obj_t *, lv_page_style_t, const lv_style_t *)"
+  extern "void lv_page_focus(lv_obj_t *, const lv_obj_t *, lv_anim_enable_t)"
 
   # lvgl/src/lv_core/lv_style.h
 
@@ -260,21 +253,36 @@ module LVGL::FFI
   #extern "void lv_style_init(void)"
   extern "void lv_style_copy(lv_style_t *, const lv_style_t *)"
 
-  # lvgl/src/lv_objx/lv_tabview.h
-  enum!(:LV_TABVIEW_STYLE, [
-    :BG,
-    :INDIC,
-    :BTN_BG,
-    :BTN_REL,
-    :BTN_PR,
-    :BTN_TGL_REL,
-    :BTN_TGL_PR,
-  ], type: "uint8_t")
-  typealias("lv_tabview_style_t", "LV_TABVIEW_STYLE")
+  # Focus groups
+  typedef "lv_group_focus_cb_t", "void (*lv_group_focus_cb_t)(struct _lv_group_t *)"
+  extern "lv_group_t * lvgui_get_focus_group()"
+  extern "void lv_group_add_obj(lv_group_t *, lv_obj_t *)"
+  extern "void lv_group_remove_obj(lv_obj_t *)"
+  extern "void lv_group_remove_all_objs(lv_group_t *)"
+  extern "void lv_group_focus_obj(lv_obj_t *)"
+  extern "void lv_group_focus_next(lv_group_t *)"
+  extern "void lv_group_focus_prev(lv_group_t *)"
+  extern "void lv_group_focus_freeze(lv_group_t *, bool)"
+  extern "void lv_group_set_click_focus(lv_group_t *, bool)"
+  extern "void lv_group_set_wrap(lv_group_t *, bool)"
+  extern "lv_obj_t *lv_group_get_focused(const lv_group_t *)"
+  extern "void lv_group_set_focus_cb(lv_group_t *, lv_group_focus_cb_t)"
+  extern "lv_obj_t * lv_group_get_focused(const lv_group_t *)"
 
-  extern "lv_obj_t * lv_tabview_create(lv_obj_t *, const lv_obj_t *)"
-  extern "void lv_tabview_set_sliding(lv_obj_t *, bool)"
-  extern "void lv_tabview_set_anim_time(lv_obj_t *, uint16_t)"
-  extern "lv_obj_t * lv_tabview_add_tab(lv_obj_t *, const char *)"
+  typedef "lv_group_user_data_t", "void *"
+  extern "lv_group_user_data_t *lv_group_get_user_data(lv_group_t *)"
+  extern "void lv_group_set_user_data(lv_group_t *, lv_group_user_data_t)"
 
+  def handle_lv_focus(group_p)
+    #userdata = lv_group_get_user_data(group_p)
+    #instance = userdata.to_value
+    # Pick from our registry, until we can rehydrate the object type with Fiddle.
+    instance = LVGL::LVGroup::REGISTRY[group_p.to_i]
+    instance.instance_exec do
+      if @focus_handler_proc
+        @focus_handler_proc.call()
+      end
+    end
+  end
+  bound_method! :handle_lv_focus, "void handle_lv_focus_(_lv_group_t *)"
 end

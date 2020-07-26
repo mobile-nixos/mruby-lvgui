@@ -1,5 +1,6 @@
 module LVGL
   [
+    :ANIM,
     :CONT_STYLE,
     :EVENT,
     :FIT,
@@ -8,15 +9,15 @@ module LVGL
     :LABEL_STYLE,
     :LAYOUT,
     :PAGE_STYLE,
-    :TABVIEW_STYLE,
     :TASK_PRIO,
   ].each do |enum|
     const_set(enum, LVGL::FFI.const_get("LV_#{enum}".to_sym))
   end
 
-  def self.ffi_call!(klass, meth, *args)
+  def self.ffi_call!(klass, meth, *args, _initiator_class: nil)
+    _initiator_class ||= klass
     unless klass.const_defined?(:LV_TYPE)
-      raise "Tried to ffi_call!(..., #{meth}) with a #{klass.name}, which does not define LV_TYPE"
+      raise "Tried to ffi_call!(..., #{meth}) with a #{_initiator_class.name}, which does not define LV_TYPE"
     end
 
     ffi_name = "lv_#{klass.const_get(:LV_TYPE)}_#{meth}".to_sym
@@ -25,7 +26,7 @@ module LVGL
       return LVGL::FFI.send(ffi_name, *args)
     else
       if klass.superclass
-        return ffi_call!(klass.superclass, meth, *args)
+        return ffi_call!(klass.superclass, meth, *args, _initiator_class: _initiator_class)
       else
         raise "Could not find #{meth} in the class hierarchy."
       end
@@ -69,7 +70,11 @@ module LVGL
     end
 
     def self.from_pointer(pointer)
-      self.new(pointer: pointer)
+      if REGISTRY[pointer.to_i]
+        REGISTRY[pointer.to_i]
+      else
+        self.new(pointer: pointer)
+      end
     end
 
     def get_style()
@@ -159,39 +164,6 @@ module LVGL
     LV_TYPE = :img
   end
 
-  class LVTabview < LVObject
-    LV_TYPE = :tabview
-
-    class LVTabpage < LVContainer
-      LV_TYPE = :page
-    end
-
-    def set_sliding(en)
-      value =
-        if en
-          1
-        else
-          0
-        end
-      LVGL.ffi_call!(self.class, :set_sliding, @self_pointer, value)
-    end
-
-    def get_style(type)
-      # type is unused, see lvgl/src/lv_objx/lv_cont.h
-      super()
-    end
-
-    def set_style(type, style)
-      # type is unused, see lvgl/src/lv_objx/lv_cont.h
-      super(style)
-    end
-
-    def add_tab(name)
-      page_pointer = LVGL.ffi_call!(self.class, :add_tab, @self_pointer, name)
-      LVTabpage.from_pointer(page_pointer)
-    end
-  end
-
   class LVPage < LVContainer
     LV_TYPE = :page
 
@@ -199,6 +171,16 @@ module LVGL
       # Prevents the object from being collected
       @style = style
       LVGL.ffi_call!(self.class, :set_style, @self_pointer, type, style.lv_style_pointer)
+    end
+
+    def focus(obj, anim)
+      ptr =
+        if obj.respond_to?(:lv_obj_pointer)
+          obj.lv_obj_pointer
+        else
+          obj
+        end
+      LVGL.ffi_call!(self.class, :focus, @self_pointer, ptr, anim)
     end
   end
 
@@ -273,5 +255,137 @@ module LVGL
       )
       const_set(const_name, wrapped)
    end
+  end
+
+  class LVGroup
+    LV_TYPE = :group
+
+    REGISTRY = {
+      # @self_pointer int value => instance
+    }
+
+    def initialize(pointer: nil)
+      @focus_handler_proc = nil
+
+      unless pointer
+        raise "(FIXME) Creating a focus group is not implemented"
+        #@self_pointer = LVGL.ffi_call!(self.class, :create)
+      else
+        @self_pointer = pointer
+      end
+      register_userdata
+    end
+
+    # Given a +Fiddle::Pointer+ pointing to an +lv_group_t+, instantiates
+    # an LVGroup class, wrapping the struct.
+    def self.from_pointer(pointer)
+      if REGISTRY[pointer.to_i]
+        REGISTRY[pointer.to_i]
+      else
+        self.new(pointer: pointer)
+      end
+    end
+
+    def initialize_copy(orig)
+      raise "Not implemented"
+    end
+
+    def lv_group_pointer()
+      @self_pointer
+    end
+
+    def method_missing(meth, *args)
+      LVGL.ffi_call!(self.class, meth, @self_pointer, *args)
+    end
+
+    def add_obj(obj)
+      ptr =
+        if obj.respond_to?(:lv_obj_pointer)
+          obj.lv_obj_pointer
+        else
+          obj
+        end
+      LVGL.ffi_call!(self.class, :add_obj, @self_pointer, ptr)
+    end
+
+    def get_focused()
+      LVObject.from_pointer(
+        LVGL.ffi_call!(self.class, :get_focused, @self_pointer)
+      )
+    end
+
+    def focus_handler=(cb_proc)
+      # Hook the handler on-the-fly.
+      unless @focus_handler
+        LVGL.ffi_call!(self.class, :set_focus_cb, @self_pointer, LVGL::FFI["handle_lv_focus"])
+      end
+      @focus_handler_proc = cb_proc
+    end
+
+    def register_userdata()
+      userdata = Fiddle::Pointer[self]
+      REGISTRY[@self_pointer.to_i] = self
+      LVGL.ffi_call!(self.class, :set_user_data, @self_pointer, userdata)
+    end
+  end
+
+  module Symbols
+    AUDIO          = "\xef\x80\x81" # 61441, 0xF001
+    VIDEO          = "\xef\x80\x88" # 61448, 0xF008
+    LIST           = "\xef\x80\x8b" # 61451, 0xF00B
+    OK             = "\xef\x80\x8c" # 61452, 0xF00C
+    CLOSE          = "\xef\x80\x8d" # 61453, 0xF00D
+    POWER          = "\xef\x80\x91" # 61457, 0xF011
+    SETTINGS       = "\xef\x80\x93" # 61459, 0xF013
+    HOME           = "\xef\x80\x95" # 61461, 0xF015
+    DOWNLOAD       = "\xef\x80\x99" # 61465, 0xF019
+    DRIVE          = "\xef\x80\x9c" # 61468, 0xF01C
+    REFRESH        = "\xef\x80\xa1" # 61473, 0xF021
+    MUTE           = "\xef\x80\xa6" # 61478, 0xF026
+    VOLUME_MID     = "\xef\x80\xa7" # 61479, 0xF027
+    VOLUME_MAX     = "\xef\x80\xa8" # 61480, 0xF028
+    IMAGE          = "\xef\x80\xbe" # 61502, 0xF03E
+    EDIT           = "\xef\x8C\x84" # 62212, 0xF304
+    PREV           = "\xef\x81\x88" # 61512, 0xF048
+    PLAY           = "\xef\x81\x8b" # 61515, 0xF04B
+    PAUSE          = "\xef\x81\x8c" # 61516, 0xF04C
+    STOP           = "\xef\x81\x8d" # 61517, 0xF04D
+    NEXT           = "\xef\x81\x91" # 61521, 0xF051
+    EJECT          = "\xef\x81\x92" # 61522, 0xF052
+    LEFT           = "\xef\x81\x93" # 61523, 0xF053
+    RIGHT          = "\xef\x81\x94" # 61524, 0xF054
+    PLUS           = "\xef\x81\xa7" # 61543, 0xF067
+    MINUS          = "\xef\x81\xa8" # 61544, 0xF068
+    EYE_OPEN       = "\xef\x81\xae" # 61550, 0xF06E
+    EYE_CLOSE      = "\xef\x81\xb0" # 61552, 0xF070
+    WARNING        = "\xef\x81\xb1" # 61553, 0xF071
+    SHUFFLE        = "\xef\x81\xb4" # 61556, 0xF074
+    UP             = "\xef\x81\xb7" # 61559, 0xF077
+    DOWN           = "\xef\x81\xb8" # 61560, 0xF078
+    LOOP           = "\xef\x81\xb9" # 61561, 0xF079
+    DIRECTORY      = "\xef\x81\xbb" # 61563, 0xF07B
+    UPLOAD         = "\xef\x82\x93" # 61587, 0xF093
+    CALL           = "\xef\x82\x95" # 61589, 0xF095
+    CUT            = "\xef\x83\x84" # 61636, 0xF0C4
+    COPY           = "\xef\x83\x85" # 61637, 0xF0C5
+    SAVE           = "\xef\x83\x87" # 61639, 0xF0C7
+    CHARGE         = "\xef\x83\xa7" # 61671, 0xF0E7
+    PASTE          = "\xef\x83\xAA" # 61674, 0xF0EA
+    BELL           = "\xef\x83\xb3" # 61683, 0xF0F3
+    KEYBOARD       = "\xef\x84\x9c" # 61724, 0xF11C
+    GPS            = "\xef\x84\xa4" # 61732, 0xF124
+    FILE           = "\xef\x85\x9b" # 61787, 0xF158
+    WIFI           = "\xef\x87\xab" # 61931, 0xF1EB
+    BATTERY_FULL   = "\xef\x89\x80" # 62016, 0xF240
+    BATTERY_3      = "\xef\x89\x81" # 62017, 0xF241
+    BATTERY_2      = "\xef\x89\x82" # 62018, 0xF242
+    BATTERY_1      = "\xef\x89\x83" # 62019, 0xF243
+    BATTERY_EMPTY  = "\xef\x89\x84" # 62020, 0xF244
+    USB            = "\xef\x8a\x87" # 62087, 0xF287
+    BLUETOOTH      = "\xef\x8a\x93" # 62099, 0xF293
+    TRASH          = "\xef\x8B\xAD" # 62189, 0xF2ED
+    BACKSPACE      = "\xef\x95\x9A" # 62810, 0xF55A
+    SD_CARD        = "\xef\x9F\x82" # 63426, 0xF7C2
+    NEW_LINE       = "\xef\xA2\xA2" # 63650, 0xF8A2
   end
 end
