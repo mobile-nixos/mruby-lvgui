@@ -13,8 +13,10 @@ module LVGUI::HAL
         battery
         bms
         BAT0
-      }.map { |name| File.join(NODE_BASE, name) }
-        .find { |path| File.exist?(path) }
+        *-battery
+      }.map { |name| Dir.glob(File.join(NODE_BASE, name)).first }
+        .compact
+        .first
 
       if node
         Battery.new(node)
