@@ -53,6 +53,7 @@ module LVGUI
     while true
       LVGL::Hacks::LVTask.handle_tasks
       sleep(1.0/REFRESH_RATE)
+      yield if block_given?
     end
   end
 
