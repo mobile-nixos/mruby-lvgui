@@ -92,4 +92,6 @@ extern "void lvgui_set_lv_style__line_opa(lv_style_t *, lv_opa_t)"
 extern "uint8_t lvgui_get_lv_style__line_rounded(lv_style_t *)"
 extern "void lvgui_set_lv_style__line_rounded(lv_style_t *, uint8_t)"
 
+extern "lv_anim_t * lvgui_allocate_lv_anim()"
+
 end # module LVGL::FFI

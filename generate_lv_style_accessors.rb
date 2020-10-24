@@ -164,6 +164,10 @@ bindings(:lv_style, [
   ],
 ])
 
+# We're re-using the allocator pattern, without making actual struct accessors
+# as LVGL already assumes it'll be handled through accesor functions.
+bindings(:lv_anim, [])
+
 $ffi << <<~EOF
 end # module LVGL::FFI
 EOF
