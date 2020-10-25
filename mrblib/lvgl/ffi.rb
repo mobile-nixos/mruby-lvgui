@@ -36,6 +36,10 @@ module LVGL::FFI
   typealias("lv_coord_t", "int16_t")
   typedef "lv_obj_user_data_t", "void *"
 
+  # lvgl/src/lv_misc/lv_color.h
+  typealias("lv_color_t", "uint32_t")
+  typealias("lv_opa_t", "uint8_t")
+
   # introspection.h
   extern "bool lv_introspection_is_simulator()"
   extern "bool lv_introspection_is_debug()"
@@ -103,6 +107,8 @@ module LVGL::FFI
   extern "lv_obj_user_data_t * lv_obj_get_user_data_ptr(const lv_obj_t *)"
   extern "void lv_obj_set_user_data(lv_obj_t *, lv_obj_user_data_t)"
   extern "void lv_obj_set_event_cb(lv_obj_t *, lv_event_cb_t)"
+  extern "void lv_obj_set_opa_scale_enable(lv_obj_t *, bool)"
+  extern "void lv_obj_set_opa_scale(lv_obj_t *, lv_opa_t)"
   extern "void lv_obj_set_pos(lv_obj_t *, lv_coord_t, lv_coord_t)"
   extern "void lv_obj_set_x(lv_obj_t *, lv_coord_t)"
   extern "void lv_obj_set_y(lv_obj_t *, lv_coord_t)"
@@ -165,10 +171,6 @@ module LVGL::FFI
   extern "void lv_cont_set_fit4(lv_obj_t *, lv_fit_t, lv_fit_t, lv_fit_t, lv_fit_t)"
   extern "void lv_cont_set_fit2(lv_obj_t *, lv_fit_t, lv_fit_t)"
   extern "void lv_cont_set_fit(lv_obj_t *, lv_fit_t)"
-
-  # lvgl/src/lv_misc/lv_color.h
-  typealias("lv_color_t", "uint32_t")
-  typealias("lv_opa_t", "uint8_t")
 
   # lvgl/src/lv_core/lv_disp.h
   extern "void lv_disp_load_scr(lv_obj_t *)"
