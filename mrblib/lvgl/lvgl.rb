@@ -329,6 +329,41 @@ module LVGL
     end
   end
 
+  # Wraps an +lv_anim_t+ in a class with some light duty housekeeping.
+  class LVAnim
+    LV_TYPE = :anim
+
+    # Given a +Fiddle::Pointer+ pointing to an +lv_anim_t+, instantiates
+    # an LVAnim class, wrapping the struct.
+    def self.from_pointer(pointer)
+      instance = LVGL::LVAnim.new()
+      instance.instance_exec do
+        @self_pointer = pointer
+      end
+
+      instance
+    end
+
+    def initialize()
+      @self_pointer = LVGL::FFI.lvgui_allocate_lv_anim()
+      self.init
+    end
+
+    def lv_anim_pointer()
+      @self_pointer
+    end
+
+    def set_exec_cb(obj, cb_name)
+      fn = LVGL::FFI[cb_name.to_s]
+      raise "No function for #{cb_name} on LVGL::FFI" unless fn
+      LVGL.ffi_call!(self.class, "set_exec_cb", @self_pointer, obj.lv_obj_pointer, fn)
+    end
+
+    def method_missing(meth, *args)
+      LVGL.ffi_call!(self.class, meth, @self_pointer, *args)
+    end
+  end
+
   module Symbols
     AUDIO          = "\xef\x80\x81" # 61441, 0xF001
     VIDEO          = "\xef\x80\x88" # 61448, 0xF008

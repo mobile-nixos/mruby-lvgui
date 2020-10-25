@@ -43,6 +43,9 @@ module LVGUI
     # Prepare LVGL
     LVGL::Hacks.init()
 
+    # Start the animation core
+    LVGL::FFI.lv_anim_core_init()
+
     # And switch to the desired theme
     LVGL::Hacks.theme_night(NIXOS_LIGHT_HUE)
   end
