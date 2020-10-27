@@ -16,10 +16,6 @@ module LVGUI
     return if @initialized
     @initialized = true
 
-    Args.define({
-      resolution: nil,
-    })
-
     # This is used by the "simulator".
     if Args.get(:resolution)
       pair = Args.get(:resolution).split("x")
