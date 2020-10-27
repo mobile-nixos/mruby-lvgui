@@ -232,6 +232,39 @@ module LVGL::FFI
   extern "void lv_page_set_style(lv_obj_t *, lv_page_style_t, const lv_style_t *)"
   extern "void lv_page_focus(lv_obj_t *, const lv_obj_t *, lv_anim_enable_t)"
 
+
+  # lvgl/src/lv_objx/lv_kb.h
+  enum!(:LV_KB_MODE, [
+    :TEXT,
+    :NUM,
+    :TEXT_UPPER,
+  ], type: "uint8_t")
+  typealias("lv_kb_mode_t", "LV_KB_MODE")
+
+  enum!(:LV_KB_STYLE, [
+    :BG,
+    :BTN_REL,
+    :BTN_PR,
+    :BTN_TGL_REL,
+    :BTN_TGL_PR,
+    :BTN_INA,
+  ])
+  typealias("lv_kb_style_t", "LV_KB_STYLE")
+
+  extern "lv_obj_t * lv_kb_create(lv_obj_t *, const lv_obj_t *)"
+  extern "void lv_kb_set_ta(lv_obj_t *, lv_obj_t *)"
+  extern "void lv_kb_set_mode(lv_obj_t *, lv_kb_mode_t)"
+  extern "void lv_kb_set_cursor_manage(lv_obj_t *, bool)"
+  extern "void lv_kb_set_map(lv_obj_t *, const char * [])" # ??
+  extern "void lv_kb_set_ctrl_map(lv_obj_t * , const lv_btnm_ctrl_t [])" # ??
+  extern "void lv_kb_set_style(lv_obj_t *, lv_kb_style_t, const lv_style_t *)"
+  extern "lv_obj_t * lv_kb_get_ta(const lv_obj_t *)"
+  extern "lv_kb_mode_t lv_kb_get_mode(const lv_obj_t *)"
+  extern "bool lv_kb_get_cursor_manage(const lv_obj_t *)"
+  extern "const char ** lv_kb_get_map_array(const lv_obj_t *)"
+  extern "const lv_style_t * lv_kb_get_style(const lv_obj_t *, lv_kb_style_t)"
+  extern "void lv_kb_def_event_cb(lv_obj_t *, lv_event_t)"
+
   # lvgl/src/lv_core/lv_style.h
 
   #typedef uint8_t lv_border_part_t

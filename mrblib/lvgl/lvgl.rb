@@ -4,6 +4,8 @@ module LVGL
     :CONT_STYLE,
     :EVENT,
     :FIT,
+    :KB_MODE,
+    :KB_STYLE,
     :LABEL_ALIGN,
     :LABEL_LONG,
     :LABEL_STYLE,
