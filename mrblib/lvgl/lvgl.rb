@@ -362,6 +362,24 @@ module LVGL
     def method_missing(meth, *args)
       LVGL.ffi_call!(self.class, meth, @self_pointer, *args)
     end
+
+    module Path
+      # Initializes global animation paths
+      [
+        "linear",
+        "step",
+        "ease_in",
+        "ease_out",
+        "ease_in_out",
+        "overshoot",
+        "bounce",
+      ].each do |name|
+        const_set(
+          name.upcase.to_sym,
+          LVGL::FFI.handler.sym("lv_anim_path_#{name}".downcase)
+        )
+      end
+    end
   end
 
   module Symbols
