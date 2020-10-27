@@ -258,6 +258,7 @@ module LVGL::FFI
   # Animations
   typealias "lv_anim_value_t", "int16_t"
   typedef "lv_anim_exec_xcb_t", "void (*lv_anim_exec_xcb_t)(void *, lv_anim_value_t)"
+  typedef "lv_anim_path_cb_t", "lv_anim_value_t (*lv_anim_path_cb_t)(const struct _lv_anim_t *)"
   extern "void lv_anim_init(lv_anim_t *)"
   extern "void lv_anim_set_exec_cb(lv_anim_t *, void *, lv_anim_exec_xcb_t)"
   extern "void lv_anim_create(lv_anim_t *)"
@@ -266,6 +267,7 @@ module LVGL::FFI
   extern "void lv_anim_set_repeat(lv_anim_t *, uint16_t)"
   extern "void lv_anim_set_playback(lv_anim_t *, uint16_t)"
   extern "void lv_anim_set_time(lv_anim_t *, int16_t, int16_t)"
+  extern "void lv_anim_set_path_cb(lv_anim_t *, lv_anim_path_cb_t)"
   extern "void lv_anim_set_values(lv_anim_t *, lv_anim_value_t, lv_anim_value_t)"
 
   # Focus groups
