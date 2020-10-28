@@ -224,6 +224,16 @@ module LVGL::FFI
   ], type: "uint8_t")
   typealias("lv_page_style_t", "LV_PAGE_STYLE")
 
+  enum!(:LV_SB_MODE, [
+    { :OFF    => 0x0 },
+    { :ON     => 0x1 },
+    { :DRAG   => 0x2 },
+    { :AUTO   => 0x3 },
+    { :HIDE   => 0x4 },
+    { :UNHIDE => 0x5 },
+  ], type: "uint8_t")
+  typealias("lv_sb_mode_t", "LV_SB_MODE")
+
   extern "lv_obj_t * lv_page_create(lv_obj_t *, const lv_obj_t *)"
   extern "void lv_page_clean(lv_obj_t *)"
   extern "lv_obj_t * lv_page_get_scrl(const lv_obj_t *)"
@@ -264,6 +274,74 @@ module LVGL::FFI
   extern "const char ** lv_kb_get_map_array(const lv_obj_t *)"
   extern "const lv_style_t * lv_kb_get_style(const lv_obj_t *, lv_kb_style_t)"
   extern "void lv_kb_def_event_cb(lv_obj_t *, lv_event_t)"
+
+
+  # lvgl/src/lv_objx/lv_ta.h
+  enum!(:LV_CURSOR, [
+    :NONE,
+    :LINE,
+    :BLOCK,
+    :OUTLINE,
+    :UNDERLINE,
+    { :HIDDEN => 0x08 },
+  ], type: "uint8_t")
+  typealias("lv_cursor_type_t", "LV_CURSOR")
+
+  enum!(:LV_TA_STYLE, [
+    :BG,
+    :SB,
+    :CURSOR,
+    :EDGE_FLASH,
+    :PLACEHOLDER,
+  ])
+  typealias("lv_ta_style_t", "LV_TA_STYLE")
+
+  extern "lv_obj_t * lv_ta_create(lv_obj_t *, const lv_obj_t *)"
+  extern "void lv_ta_add_char(lv_obj_t *, uint32_t)"
+  extern "void lv_ta_add_text(lv_obj_t *, const char *)"
+  extern "void lv_ta_del_char(lv_obj_t *)"
+  extern "void lv_ta_del_char_forward(lv_obj_t *)"
+  extern "void lv_ta_set_text(lv_obj_t *, const char *)"
+  extern "void lv_ta_set_placeholder_text(lv_obj_t *, const char *)"
+  extern "void lv_ta_set_cursor_pos(lv_obj_t *, int16_t)"
+  extern "void lv_ta_set_cursor_type(lv_obj_t *, lv_cursor_type_t)"
+  extern "void lv_ta_set_cursor_click_pos(lv_obj_t *, bool)"
+  extern "void lv_ta_set_pwd_mode(lv_obj_t *, bool)"
+  extern "void lv_ta_set_one_line(lv_obj_t *, bool)"
+  extern "void lv_ta_set_text_align(lv_obj_t *, lv_label_align_t)"
+  extern "void lv_ta_set_accepted_chars(lv_obj_t *, const char *)"
+  extern "void lv_ta_set_max_length(lv_obj_t *, uint16_t)"
+  #extern "void lv_ta_set_insert_replace(lv_obj_t *, const char *)"
+  extern "void lv_ta_set_sb_mode(lv_obj_t *, lv_sb_mode_t)"
+  extern "void lv_ta_set_scroll_propagation(lv_obj_t *, bool)"
+  extern "void lv_ta_set_edge_flash(lv_obj_t *, bool)"
+  extern "void lv_ta_set_style(lv_obj_t *, lv_ta_style_t, const lv_style_t *)"
+  extern "void lv_ta_set_text_sel(lv_obj_t *, bool)"
+  extern "void lv_ta_set_pwd_show_time(lv_obj_t *, uint16_t)"
+  extern "void lv_ta_set_cursor_blink_time(lv_obj_t *, uint16_t)"
+  extern "const char * lv_ta_get_text(const lv_obj_t *)"
+  extern "const char * lv_ta_get_placeholder_text(lv_obj_t *)"
+  extern "lv_obj_t * lv_ta_get_label(const lv_obj_t *)"
+  extern "uint16_t lv_ta_get_cursor_pos(const lv_obj_t *)"
+  extern "lv_cursor_type_t lv_ta_get_cursor_type(const lv_obj_t *)"
+  extern "bool lv_ta_get_cursor_click_pos(lv_obj_t *)"
+  extern "bool lv_ta_get_pwd_mode(const lv_obj_t *)"
+  extern "bool lv_ta_get_one_line(const lv_obj_t *)"
+  extern "const char * lv_ta_get_accepted_chars(lv_obj_t *)"
+  extern "uint16_t lv_ta_get_max_length(lv_obj_t *)"
+  extern "lv_sb_mode_t lv_ta_get_sb_mode(const lv_obj_t *)"
+  extern "bool lv_ta_get_scroll_propagation(lv_obj_t *)"
+  extern "bool lv_ta_get_edge_flash(lv_obj_t *)"
+  extern "const lv_style_t * lv_ta_get_style(const lv_obj_t *, lv_ta_style_t)"
+  extern "bool lv_ta_text_is_selected(const lv_obj_t *)"
+  extern "bool lv_ta_get_text_sel_en(lv_obj_t *)"
+  extern "uint16_t lv_ta_get_pwd_show_time(lv_obj_t *)"
+  extern "uint16_t lv_ta_get_cursor_blink_time(lv_obj_t *)"
+  extern "void lv_ta_clear_selection(lv_obj_t *)"
+  extern "void lv_ta_cursor_right(lv_obj_t *)"
+  extern "void lv_ta_cursor_left(lv_obj_t *)"
+  extern "void lv_ta_cursor_down(lv_obj_t *)"
+  extern "void lv_ta_cursor_up(lv_obj_t *)"
 
   # lvgl/src/lv_core/lv_style.h
 

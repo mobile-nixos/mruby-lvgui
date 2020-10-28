@@ -2,6 +2,7 @@ module LVGL
   [
     :ANIM,
     :CONT_STYLE,
+    :CURSOR,
     :EVENT,
     :FIT,
     :KB_MODE,
@@ -12,6 +13,7 @@ module LVGL
     :LAYOUT,
     :PAGE_STYLE,
     :TASK_PRIO,
+    :TA_STYLE,
   ].each do |enum|
     const_set(enum, LVGL::FFI.const_get("LV_#{enum}".to_sym))
   end
