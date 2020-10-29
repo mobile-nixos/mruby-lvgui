@@ -228,6 +228,66 @@ module LVGL
     LV_TYPE = :btn
   end
 
+  class LVTextArea < LVObject
+    LV_TYPE = :ta
+
+    def add_text(text)
+      # The "\0" thing is a bit scary; it seems that *something* related
+      # to C string and "\0" in either mruby or LVGL, likely mruby, may
+      # cause issues when using something like `split` to split a bigger
+      # string.
+      #
+      # My assumption is that the ruby string is not \0 completed, and
+      # given as-is to the C world via ffi.
+      LVGL.ffi_call!(self.class, :add_text, @self_pointer, text + "\0")
+    end
+
+    def set_text(text)
+      # The "\0" thing is a bit scary; it seems that *something* related
+      # to C string and "\0" in either mruby or LVGL, likely mruby, may
+      # cause issues when using something like `split` to split a bigger
+      # string.
+      #
+      # My assumption is that the ruby string is not \0 completed, and
+      # given as-is to the C world via ffi.
+      LVGL.ffi_call!(self.class, :set_text, @self_pointer, text + "\0")
+    end
+
+    def set_placeholder_text(text)
+      # The "\0" thing is a bit scary; it seems that *something* related
+      # to C string and "\0" in either mruby or LVGL, likely mruby, may
+      # cause issues when using something like `split` to split a bigger
+      # string.
+      #
+      # My assumption is that the ruby string is not \0 completed, and
+      # given as-is to the C world via ffi.
+      LVGL.ffi_call!(self.class, :set_placeholder_text, @self_pointer, text + "\0")
+    end
+
+    def set_accepted_chars(text)
+      # The "\0" thing is a bit scary; it seems that *something* related
+      # to C string and "\0" in either mruby or LVGL, likely mruby, may
+      # cause issues when using something like `split` to split a bigger
+      # string.
+      #
+      # My assumption is that the ruby string is not \0 completed, and
+      # given as-is to the C world via ffi.
+      LVGL.ffi_call!(self.class, :set_accepted_chars, @self_pointer, text + "\0")
+    end
+
+    def get_style(style_type)
+      style = LVGL.ffi_call!(self.class, :get_style, @self_pointer, style_type)
+      LVGL::LVStyle.from_pointer(style)
+    end
+
+    def set_style(style_type, style)
+      # Prevents the object from being collected
+      @_style ||= {}
+      @_style[style_type] = style
+      LVGL.ffi_call!(self.class, :set_style, @self_pointer, style_type, style.lv_style_pointer)
+    end
+  end
+
   class LVKeyboard < LVObject
     LV_TYPE = :kb
 
