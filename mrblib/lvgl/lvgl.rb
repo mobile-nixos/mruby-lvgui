@@ -228,6 +228,22 @@ module LVGL
     LV_TYPE = :btn
   end
 
+  class LVKeyboard < LVObject
+    LV_TYPE = :kb
+
+    def get_style(style_type)
+      style = LVGL.ffi_call!(self.class, :get_style, @self_pointer, style_type)
+      LVGL::LVStyle.from_pointer(style)
+    end
+
+    def set_style(style_type, style)
+      # Prevents the object from being collected
+      @_style ||= {}
+      @_style[style_type] = style
+      LVGL.ffi_call!(self.class, :set_style, @self_pointer, style_type, style.lv_style_pointer)
+    end
+  end
+
   # Wraps an +lv_style_t+ in a class with some light duty housekeeping.
   class LVStyle
     # Given a +Fiddle::Pointer+ pointing to an +lv_style_t+, instantiates
