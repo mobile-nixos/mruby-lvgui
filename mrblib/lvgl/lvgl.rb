@@ -26,7 +26,22 @@ module LVGL
 
     ffi_name = "lv_#{klass.const_get(:LV_TYPE)}_#{meth}".to_sym
     if LVGL::FFI.respond_to?(ffi_name)
-      args = args.map { |arg| if arg == nil then 0 else arg end }
+      args = args.map do |arg|
+        case arg
+        when  nil
+          0
+        when false
+          0
+        when true
+          1
+        else
+          if arg.respond_to? :lv_obj_pointer
+            arg.lv_obj_pointer
+          else
+            arg
+          end
+        end
+      end
       return LVGL::FFI.send(ffi_name, *args)
     else
       if klass.superclass
