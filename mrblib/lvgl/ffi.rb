@@ -175,7 +175,10 @@ module LVGL::FFI
   extern "void lv_cont_set_fit(lv_obj_t *, lv_fit_t)"
 
   # lvgl/src/lv_core/lv_disp.h
+  extern "lv_obj_t *lv_disp_get_scr_act(lv_disp_t *)"
   extern "void lv_disp_load_scr(lv_obj_t *)"
+  extern "lv_disp_t *lv_disp_get_default()"
+  extern "lv_obj_t *lv_scr_act()"
 
   # lvgl/src/lv_objx/lv_img.h
   extern "lv_obj_t * lv_img_create(lv_obj_t *, const lv_obj_t *)"

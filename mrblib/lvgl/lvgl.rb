@@ -52,6 +52,22 @@ module LVGL
     end
   end
 
+  class LVDisplay
+    # This is not actually an object type in LVGL proper.
+
+    # Get default display
+    def self.get_default()
+      LVGL::FFI.lv_disp_get_default()
+    end
+
+    # Gets the current active screen.
+    def self.get_scr_act()
+      LVObject.from_pointer(
+        LVGL::FFI.lv_disp_get_scr_act(get_default())
+      )
+    end
+  end
+
   class LVObject
     LV_TYPE = :obj
 
