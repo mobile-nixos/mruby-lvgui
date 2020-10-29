@@ -150,6 +150,11 @@ module LVGL
       REGISTRY[@self_pointer.to_i] = self
       LVGL.ffi_call!(self.class, :set_user_data, @self_pointer, userdata)
     end
+
+    def get_parent()
+      ptr = LVGL.ffi_call!(self.class, :get_parent, @self_pointer)
+      LVObject.from_pointer(ptr)
+    end
   end
 
   class LVContainer < LVObject
