@@ -112,6 +112,8 @@ module LVGL::FFI
   extern "void lv_obj_set_pos(lv_obj_t *, lv_coord_t, lv_coord_t)"
   extern "void lv_obj_set_x(lv_obj_t *, lv_coord_t)"
   extern "void lv_obj_set_y(lv_obj_t *, lv_coord_t)"
+  extern "void lv_obj_set_hidden(lv_obj_t *, bool)"
+  extern "void lv_obj_set_parent(lv_obj_t *, lv_obj_t *)"
   extern "void lv_obj_clean(lv_obj_t *)"
   extern "lv_obj_t * lv_obj_get_parent(const lv_obj_t *)"
   extern "bool lv_obj_is_children(const lv_obj_t * obj, const lv_obj_t * target)"
