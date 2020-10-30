@@ -14,8 +14,15 @@ module LVGL
     :PAGE_STYLE,
     :TASK_PRIO,
     :TA_STYLE,
-  ].each do |enum|
-    const_set(enum, LVGL::FFI.const_get("LV_#{enum}".to_sym))
+  ].each do |enum_name|
+    const_set(enum_name, LVGL::FFI.const_get("LV_#{enum_name}".to_sym))
+    LVGL.const_get(enum_name).module_exec do
+      def self.from_value(needle)
+        self.constants.find do |name|
+          needle == self.const_get(name)
+        end
+      end
+    end
   end
 
   def self.ffi_call!(klass, meth, *args, _initiator_class: nil)
