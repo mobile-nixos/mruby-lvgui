@@ -139,7 +139,7 @@ module LVGL
 
     def event_handler=(cb_proc)
       # Hook the handler on-the-fly.
-      unless @event_handler
+      unless @event_handler_proc
         LVGL.ffi_call!(self.class, :set_event_cb, @self_pointer, LVGL::FFI["handle_lv_event"])
       end
       @event_handler_proc = cb_proc
