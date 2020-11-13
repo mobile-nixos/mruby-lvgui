@@ -162,6 +162,18 @@ module LVGL
       ptr = LVGL.ffi_call!(self.class, :get_parent, @self_pointer)
       LVObject.from_pointer(ptr)
     end
+
+    def get_children()
+      children = []
+      last_child = nil
+      loop do
+        ptr = LVGL.ffi_call!(self.class, :get_child_back, @self_pointer, last_child)
+        break if ptr.null?
+        last_child = LVObject.from_pointer(ptr)
+        children << last_child
+      end
+      children
+    end
   end
 
   class LVContainer < LVObject
