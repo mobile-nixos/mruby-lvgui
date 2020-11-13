@@ -91,6 +91,12 @@ module LVGL::FFI
   ], type: "uint8_t")
   typealias("lv_event_t", "LV_EVENT")
   typedef "lv_event_cb_t", "void (*lv_event_cb_t)(struct _lv_obj_t *, lv_event_t)"
+  #typedef uint8_t lv_res_t;
+  enum!(:LV_RES, [
+    { :INV => 0x00 },
+    { :OK  => 0x01 },
+  ], type: :uint8_t)
+  typealias("lv_res_t", "LV_RES")
 
   extern "lv_obj_t * lv_obj_create(lv_obj_t *, const lv_obj_t *)"
   extern "const lv_style_t * lv_obj_get_style(const lv_obj_t *)"
@@ -120,6 +126,8 @@ module LVGL::FFI
   extern "void lv_obj_set_opa_scale_enable(lv_obj_t *, bool)"
   extern "lv_opa_t lv_obj_get_opa_scale_enable(const lv_obj_t *)"
   extern "void lv_obj_clean(lv_obj_t *)"
+  extern "lv_res_t lv_obj_del(lv_obj_t *)"
+  extern "void lv_obj_del_async(struct _lv_obj_t *)"
   extern "lv_obj_t * lv_obj_get_parent(const lv_obj_t *)"
   extern "bool lv_obj_is_children(const lv_obj_t * obj, const lv_obj_t * target)"
   extern "lv_obj_t *lv_obj_get_child_back(const lv_obj_t *, const lv_obj_t *)"
