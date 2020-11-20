@@ -62,6 +62,10 @@ module LVGUI
     )
   end
 
+  def self.focus_ring_disable()
+    LVGL::FFI.lvgui_focus_ring_disable()
+  end
+
   # Wraps an LVGL widget.
   class Widget
     def initialize(widget)

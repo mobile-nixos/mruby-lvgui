@@ -404,6 +404,7 @@ module LVGL::FFI
   typedef "lv_group_focus_cb_t", "void (*lv_group_focus_cb_t)(struct _lv_group_t *)"
   extern "void lv_anim_core_init()"
   extern "lv_group_t * lvgui_get_focus_group()"
+  extern "void lvgui_focus_ring_disable()"
   extern "void lv_group_add_obj(lv_group_t *, lv_obj_t *)"
   extern "void lv_group_remove_obj(lv_obj_t *)"
   extern "void lv_group_remove_all_objs(lv_group_t *)"
