@@ -9,12 +9,6 @@ that are not memory-constrained.
 
 == Known issues
 
-=== Bindings are generated
-
-This is not an issue in itself, but the generator is not part of this
-repository, and does not happen as part of a build set for this mrbgem. It
-would be better to always generate fresh bindings at build time.
-
 === Incomplete bindings
 
 Only the subset required for the intended use-case are written.
